@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Concentration Memory Game</title>
+    <title>Memory Quest</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
-        <h1>Concentration Memory Game</h1>
-        <div id="timer">Time Left: <span id="time">60</span> seconds</div>
-        <div id="wrong-guesses">Wrong Guesses: <span id="wrong-count">0</span></div>
-        <div id="board"></div>
-        <button id="restart-button" style="display: none;">Restart Game</button>
+        <h1>Memory Quest</h1>
+        <div class="info-panel">
+            <p>Level: <span id="level-count">1</span></p>
+            <p>Time Left: <span id="time">60</span> seconds</p>
+            <p>Wrong Guesses: <span id="wrong-count">0</span>5</p>
+        </div>
+        <div id="board" class="board"></div>
+        <button id="restart-button" class="restart-button">Restart Game</button>
     </div>
 
     <script src="app.js"></script>
