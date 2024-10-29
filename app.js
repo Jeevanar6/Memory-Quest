@@ -18,12 +18,23 @@ function createColumnOfCards() {
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
         cardElement.dataset.cardValue = card;
-        
+        cardElement.innerText = '?'; // Hide the card value initially
 
+        // Add click event to flip a card
         cardElement.addEventListener('click', () => flipOneCard(cardElement));
         board.appendChild(cardElement);
     });
 }
+
+function flipOneCard(card) {
+    if (!flippedCard) {
+        card.classList.add('flipped');
+        card.innerText = card.dataset.cardValue; // Show card value
+        flippedCard = card; // Track this flipped card
+    }
+}
+
+
 
 
 

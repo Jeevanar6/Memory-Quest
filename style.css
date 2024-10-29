@@ -16,14 +16,25 @@ body {
 
 #board {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
     gap: 10px;
+}
+
+.level1 #board {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.level2 #board {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.level3 #board {
+    grid-template-columns: repeat(6, 1fr);
 }
 
 .card {
     width: 100px;
     height: 100px;
-    background-color: #007bff; /* Blue for face-dwon */
+    background-color: black; /* Black for face-dwon */
     color: white;
     display: flex;
     align-items: center;
@@ -33,6 +44,6 @@ body {
 }
 
 .card.flipped {
-    background-color: #28a745; /* Green when flipped */
+    background-color: grey; /* Grey when flipped */
 }
 
