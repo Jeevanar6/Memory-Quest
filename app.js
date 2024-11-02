@@ -1,4 +1,10 @@
-const cards = ['🦚', '🐥', '🐒', '🦖'];
+const levelConfigurations = {
+    1: { columns: 3, rows: 3, totalCards: 9 },
+    2: { columns: 4, rows: 4, totalCards: 16 },
+    3: { columns: 4, rows: 6, totalCards: 24 },
+};
+
+const cards = ['🦚', '🐥', '🐒', '🦖', '🐢', '🐬', '🐸', '🦜', '🦋', '🦄', '🐼', '🐧'];
 let board = document.getElementById ('board');
 let flippedCard = null; // To track one flipped card
 let shuffledCards;
@@ -9,6 +15,15 @@ function shuffle(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+}
+
+function setupGrid(columns) {
+    board.style.gridTemplateColums = `repeat(${columns}, 1fr)`;
+}
+
+function createBoard(level) {
+    const { columns, rows, totalCards } = levelConfigurations[level];
+    setupGrid(columns);
 }
 
 function createColumnOfCards() {
