@@ -14,8 +14,33 @@ const levelDisplay = document.getElementById('level-count');
 const RestartButton = document.getElementById('restart-button');
 let flippedCard = null; // To track one flipped card
 
+// Initialize the game
+function initializeGame() {
+    const { rows, columns, reqiredPairs, time } = levelConfigurations[currentLevel];
+    board.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+    timeLeft = time;
+    wrongGuesses = 0;
+    matchedPairs = 0;
+    updateDisplay();
+    setupBoard( rows * columns, requiredPairs);
+    startTimer();
+}
 
+// Update display for timer, wrong guesses, and level
+function updateDisplay() {
+    timerDisplay.innerText = timeLeft;
+    wrongCountDisplay.innerText = wrongGuesses;
+    levelDisplay.innerText =currentLevel;
+}
 
+// Set up the board with shuffled cards based on the levels
+function setupBoard(totalCards, requiredPairs) {
+    board.innerHTML = '';
+    const symbols = ['🦚', '🐥', '🐒', '🦖', '🐢', '🐬', '🐸', '🦜', '🦋', '🦄', '🐼', '🐧'];
+    let cards = [...symbols.slice(0, requiredPairs), ...symbols.slice(0, requiredPairs)];
+
+    
+}
 
 
 
@@ -35,10 +60,6 @@ function setupGrid(columns) {
     board.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
 }
 
-function createBoard(level) {
-    const { columns, rows, totalCards } = levelConfigurations[level];
-    setupGrid(columns);
-}
 
 function createColumnOfCards() {
     shuffledCards = shuffle([...cards]); // Create a shuffled copy
