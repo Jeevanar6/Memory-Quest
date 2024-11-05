@@ -1,7 +1,7 @@
-const levelConfigurations = {
-    1: { columns: 3, rows: 3, totalCards: 9, requiredPairs: 3, time: 60 },
-    2: { columns: 4, rows: 4, totalCards: 16, requiredPairs: 5, time: 90 },
-    3: { columns: 4, rows: 6, totalCards: 24, requiredPairs: 8, time: 120 },
+const levelSettings = {
+    1: { columns: 3, rows: 3, requiredPairs: 3, time: 60 },
+    2: { columns: 4, rows: 4, requiredPairs: 5, time: 90 },
+    3: { columns: 4, rows: 6, requiredPairs: 8, time: 120 },
 };
 
 let currentLevel = 1;
@@ -11,12 +11,12 @@ const board = document.getElementById ('board');
 const timerDisplay = document.getElementById('time');
 const wrongCountDisplay = document.getElementById('wrong-count');
 const levelDisplay = document.getElementById('level-count');
-const RestartButton = document.getElementById('restart-button');
-let flippedCard = null; // To track one flipped card
+const restartButton = document.getElementById('restart-button');
+let flippedCards = []; // To track one flipped card
 
 // Initialize the game
 function initializeGame() {
-    const { rows, columns, reqiredPairs, time } = levelConfigurations[currentLevel];
+    const { rows, columns, requiredPairs, time } = levelSettings[currentLevel];
     board.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
     timeLeft = time;
     wrongGuesses = 0;
@@ -30,8 +30,8 @@ function initializeGame() {
 function updateDisplay() {
     timerDisplay.innerText = timeLeft;
     wrongCountDisplay.innerText = wrongGuesses;
-    levelDisplay.innerText =currentLevel;
-}
+    levelDisplay.innerText = currentLevel;
+} 
 
 // Set up the board with shuffled cards based on the levels
 function setupBoard(totalCards, requiredPairs) {
@@ -50,8 +50,8 @@ cards.forEach((symbol) => {
     const card = document.createElement('div');
     card.classList.add('card');
     card.dataset.symbol = symbol;
-    card.innerText = 'symbol'; // Hide the card value initially
-    cardElement.addEventListener('click', () => flipOneCard(card));
+    card.innerText = symbol; // Hide the card value initially
+    card.addEventListener('click', flipCard);
     board.appendChild(card);
 });
 
@@ -59,52 +59,6 @@ cards.forEach((symbol) => {
 setTimeout(() => {
     document.querySelectorAll('.card').forEach(card => card.innerText = '?');
 }, 5000);
-}
-
-function flipOneCard(card) {
-    console.log("before") // To know the function is working when it is called
-    if (!flippedCard) {
-        console.log("after") // This appears after a card is flipped
-        card.classList.add('flipped');
-        card.innerText = card.dataset.symbol; // Show card value
-        flippedCard = card; // Track this flipped card. For the following clicks the function is no longer null as it holds the first card i clicked, causing the condition to be false. 
-    } else {
-        flippedCard = null; // Resets the function and flips more cards
-    }
-}
-
-let shuffledCards;
-
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-function setupGrid(columns) {
-    board.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-}
-
-
-function createColumnOfCards() {
-    shuffledCards = shuffle([...cards]); // Create a shuffled copy
-
-    shuffledCards.forEach((card) => {
-        const cardElement = document.createElement('div');
-        cardElement.classList.add('card');
-        cardElement.dataset.cardValue = card;
-        cardElement.innerText = '?'; // Hide the card value initially
-
-        // Add click event to flip a card
-        cardElement.addEventListener('click', () => flipOneCard(cardElement));
-        board.appendChild(cardElement);
-    });
-
-    setTimeout(() => {
-        document.querySelectorAll('.card').forEach(card => card.innerText = '?');
-    }, 5000); // Hide symbols after 5 seconds
 }
 
 // Flip card function
@@ -124,8 +78,8 @@ function flipCard() {
 function checkForMatch() {
     let [card1, card2] = flippedCards;
     if (card1.dataset.symbol === card2.dataset.symbol) {
-        matchPairs++;
-        if (matchedPairs === levelConfigurations[currentLevel].requiredPairs) {
+        matchedPairs++;
+        if (matchedPairs === levelSettings[currentLevel].requiredPairs) {
             winLevel();
         }
     } else {
@@ -145,6 +99,19 @@ function checkForMatch() {
     flippedCards = [];
 }
 
+// Handle winning a level
+function winLevel() {
+    clearInterval(timer);
+    if (currentLevel < 3) {
+        alert(`Congratulations! You completed level ${currentLevel}`);
+        currentLevel++;
+        initializeGame();
+    } else {
+        alert("Congratulations! You've won the game!");
+        restartButton.style.display = "block";
+    }
+}
+
 // Timer countdown function
 function startTimer() {
     timer = setInterval(() => {
@@ -153,7 +120,7 @@ function startTimer() {
         if (timeLeft <= 0) {
             clearInterval(timer);
             alert("Time's up! You lose!");
-            RestartButton.style.display = "block";
+            restartButton.style.display = "block";
         }
     }, 1000);
 }
@@ -162,33 +129,24 @@ function startTimer() {
 function loseGame() {
     clearInterval(timer);
     alert("Too many wrong guesses! You Lose!");
-    RestartButton.style.display = "block";
+    restartButton.style.display = "block";
 }
 
 // Shuffle function
 function shuffle(array) {
-    for (let i = array.legth - 1; i > 0; i--) {
+    for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i+1));
-        [arra[i], array[j]] = [array[j], array[i]];
+        [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
 //Restart the game 
 function restartGame() {
     currentLevel = 1;
-    currentLevel = 1;
     initializeGame();
-    RestartButton.style.display = "none";
+    restartButton.style.display = "none";
 }
 
 // Start the game
 initializeGame();
-RestartButton.addEventListener('cleck', restartgame);
-// Initialize game with a one-column test
-
-function initColumnTest() {
-    board.innerHTML = ''; // Clear previous content
-    createColumnOfCards(); // Create a one-column of cards
-}
-
-initColumnTest(); // Start the column test
+restartButton.addEventListener('click', restartGame);
